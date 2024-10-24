@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIMPEG</title>
+    <link href="./output.css" rel="stylesheet" />
+  </head>
+  <body class="flex justify-center m-0 p-10 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- front -->
+      <div
+        id="idCardFront"
+        class="w-[105mm] h-[167mm] bg-cover bg-center rounded-lg shadow-xl relative bg-[url('./assets/idcard_01.jpg')]"
+      >
+        <div
+          class="relative z-10 p-6 text-white flex flex-col items-center justify-center h-full"
+        >
+          <div class="w-28 h-28 overflow-hidden mb-4">
+            <img src="" alt="Profile" class="w-full h-full object-cover" />
+          </div>
+          <h2 class="text-black text-2xl font-bold">Nama Lengkap</h2>
+          <p class="text-black text-lg font-light">Calon Kepala Daerah</p>
+          <div class="text-black mt-4 text-center">
+            <p>No. ID: 1234567890</p>
+            <p>Masa Jabatan: 2024 - 2029</p>
+          </div>
+        </div>
+      </div>
+      <!-- back -->
+      <div
+        id="idCardBack"
+        class="w-[105mm] h-[167mm] bg-cover bg-center rounded-lg shadow-xl relative bg-[url('./assets/idcard_02.jpg')]"
+      >
+        <div
+          class="relative z-10 p-6 text-white flex flex-col items-center justify-center h-full"
+        >
+          <div class="mb-4 border-4 border-solid border-red-500"></div>
+        </div>
+      </div>
+      <button
+        id="downloadPdf"
+        class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+        Download Id Card as PDF
+      </button>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"
+    >
+      document
+             .getElementById("downloadPdf")
+             .addEventListener("click", function () {
+               // Use jsPDF to generate PDF
+               const pdf = new jsPDF({
+                 orientation: "landscape",
+                 unit: "px",
+                 format: [256, 160],
+               })
+
+               // Get the front and back sides of the card
+               const frontCard = document.getElementById("idCardFront")
+               const backCard = document.getElementById("idCardBack")
+
+               // Add front side to PDF
+               pdf.html(frontCard, {
+                 callback: function (pdf) {
+                   // Add back side on the next page
+                   pdf.addPage()
+                   pdf.html(backCard, {
+                     callback: function (pdf) {
+                       pdf.save("id_card.pdf")
+                     },
+                   })
+                 },
+               })
+             })
+    </script>
+  </body>
+</html>
